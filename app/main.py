@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 
-from app.lib.database import Database
+from app.database import Database
 
 app = FastAPI()
 db = Database()
