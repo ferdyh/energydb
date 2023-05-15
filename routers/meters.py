@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 from database import get_session
 
-import uuid
-
 from models import Meter
 from routers import readings
 
@@ -21,9 +19,16 @@ def get(meter_id):
 @router.post("/")
 def create(meter: Meter):
     with get_session() as session:
-        meter.id = uuid.uuid4()
         session.add(meter)
+        session.commit()
+        session.refresh(meter)
         return meter
-
     
+@router.delete("/{meter_id}")
+def delete(meter_id):
+    with get_session() as session:
+        meter = session.get(Meter, meter_id)
+        session.delete(meter)
+        session.commit()
+
 router.include_router(readings.router, prefix="/{meter_id}")
